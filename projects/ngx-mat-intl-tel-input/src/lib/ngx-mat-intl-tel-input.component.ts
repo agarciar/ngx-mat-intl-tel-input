@@ -37,8 +37,9 @@ import {coerceBooleanProperty} from '@angular/cdk/coercion';
 import {Subject} from 'rxjs';
 import {FocusMonitor} from '@angular/cdk/a11y';
 import {CanUpdateErrorState, ErrorStateMatcher, mixinErrorState} from '@angular/material/core';
-import {MatMenu} from '@angular/material/menu';
+import {MatMenu, MatMenuTrigger} from '@angular/material/menu';
 import { AbstractConstructor, Constructor } from '@angular/material/core/common-behaviors/constructor';
+import { Platform } from '@angular/cdk/platform';
 
 class NgxMatIntlTelInputBase {
   constructor(public _defaultErrorStateMatcher: ErrorStateMatcher,
@@ -98,6 +99,7 @@ export class NgxMatIntlTelInputComponent extends _NgxMatIntlTelInputMixinBase
   }
 
   @ViewChild(MatMenu) matMenu: MatMenu;
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   private _placeholder: string;
   private _required = false;
   private _disabled = false;
@@ -140,6 +142,7 @@ export class NgxMatIntlTelInputComponent extends _NgxMatIntlTelInputMixinBase
     @Optional() _parentForm: NgForm,
     @Optional() _parentFormGroup: FormGroupDirective,
     _defaultErrorStateMatcher: ErrorStateMatcher,
+    private platform: Platform,
   ) {
     super(_defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
     fm.monitor(elRef, true).subscribe(origin => {
@@ -392,5 +395,15 @@ export class NgxMatIntlTelInputComponent extends _NgxMatIntlTelInputMixinBase
       this.phoneNumber = asYouType.input(this.phoneNumber.toString());
     }
     this.previousFormattedNumber = this.phoneNumber.toString();
+  }
+
+  openMenu(){
+
+    if (!this.platform.IOS){
+      this.trigger.openMenu();
+      return;
+    }
+
+    setTimeout(()=>this.trigger.openMenu(), 500);
   }
 }

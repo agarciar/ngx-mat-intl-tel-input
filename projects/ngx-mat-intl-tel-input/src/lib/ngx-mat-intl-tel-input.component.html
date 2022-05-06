@@ -2,7 +2,7 @@
   <button
     type="button"
     mat-button
-    [matMenuTriggerFor]="menu"
+    (click)="openMenu()"
     class="country-selector"
     [disabled]="disabled"
   >
@@ -14,7 +14,8 @@
       >+{{ selectedCountry.dialCode }}</span
     >
   </button>
-  <mat-menu #menu="matMenu">
+  <mat-menu #menu="matMenu"  #trigger="matMenuTrigger"
+  [matMenuTriggerFor]="menu">
     <input
       *ngIf="enableSearch"
       class="country-search"
